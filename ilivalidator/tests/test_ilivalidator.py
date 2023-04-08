@@ -1,4 +1,4 @@
-from ilivalidator import Ilivalidator
+from ilivalidator import Ilivalidator, settings as IliValidatorSettings
 import os
 import tempfile
 
@@ -13,17 +13,18 @@ def test_validate_multiple_files_ok():
     assert valid == True
 
 def test_validate_multiple_files_allobjectsaccessible_on_ok():
-    settings = {Ilivalidator.SETTING_ALL_OBJECTS_ACCESSIBLE: True}
+    settings = IliValidatorSettings.Settings(all_objects_accessible=True)
     valid = Ilivalidator.validate([TEST_DATA_PATH+"OeREBKRM_V2_0_Gesetze.xml",TEST_DATA_PATH+"OeREBKRM_V2_0_Themen.xml"], settings)
     assert valid == True
 
 def test_validate_multiple_files_allobjectsaccessible_on_fail():
-    settings = {Ilivalidator.SETTING_ALL_OBJECTS_ACCESSIBLE: True}
+    settings = IliValidatorSettings.Settings(all_objects_accessible=True)
+    print(f'=> settings: {settings}')
     valid = Ilivalidator.validate([TEST_DATA_PATH+"OeREBKRM_V2_0_Gesetze.xml",TEST_DATA_PATH+"OeREBKRM_V2_0_Themen_missing_REF.xml"], settings)
     assert valid == False
 
 def test_validate_multiple_files_allobjectsaccessible_off_ok():
-    settings = {Ilivalidator.SETTING_ALL_OBJECTS_ACCESSIBLE: False}
+    settings = IliValidatorSettings.Settings(all_objects_accessible=False)
     valid = Ilivalidator.validate([TEST_DATA_PATH+"OeREBKRM_V2_0_Gesetze.xml",TEST_DATA_PATH+"OeREBKRM_V2_0_Themen_missing_REF.xml"], settings)
     assert valid == True
 
@@ -32,7 +33,7 @@ def test_validate_logfiles_on_ok():
     log_file = os.path.join(temp_dir.name, "mylog.log")
     xtf_log_file = log_file + ".xtf"
 
-    settings = {Ilivalidator.SETTING_LOGFILE: log_file, Ilivalidator.SETTING_LOGFILE_TIMESTAMP: True, Ilivalidator.SETTING_XTFLOG: xtf_log_file}
+    settings = IliValidatorSettings.Settings(log_file=log_file, log_file_timestamp=True, xtf_log=xtf_log_file)
     valid = Ilivalidator.validate([TEST_DATA_PATH+"OeREBKRM_V2_0_Gesetze.xml"], settings)
     assert valid == True
 
